@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Jungle English">
+<meta name="theme-color" content="#1b8a3a">
+<title>Jungle English 🐒</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{--o:#ff7a00;--p:#7b2ff7;--pink:#ff4fa3;--y:#ffd23f;--g:#22b14c;--r:#ef4444}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#0d5c2a;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+#app{position:fixed;inset:0;max-width:520px;margin:0 auto;background:linear-gradient(180deg,#7fe0ff 0%,#b8f29a 45%,#2fae4e 100%);overflow:hidden}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;padding:calc(env(safe-area-inset-top) + 10px) 14px calc(env(safe-area-inset-bottom) + 12px)}
+.screen.on{display:flex}
+.en{direction:ltr;unicode-bidi:isolate;font-family:"Chalkboard SE","Comic Sans MS","Marker Felt",system-ui,sans-serif}
+button{font:inherit;border:none;cursor:pointer;outline:none;color:inherit}
+button:focus{outline:none}
+.btn{background:var(--o);color:#fff;font-weight:800;font-size:20px;padding:12px 24px;border-radius:18px;box-shadow:0 5px 0 #b35500;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #b35500}
+.btn.purple{background:var(--p);box-shadow:0 5px 0 #4b16a3}
+.btn.green{background:var(--g);box-shadow:0 5px 0 #137a31}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.pill{background:rgba(255,255,255,.9);border-radius:999px;padding:6px 12px;font-weight:800;font-size:16px;box-shadow:0 3px 0 rgba(0,0,0,.15);white-space:nowrap}
+.back{background:#fff;border-radius:50%;width:42px;height:42px;font-size:22px;box-shadow:0 3px 0 rgba(0,0,0,.2);flex:0 0 auto}
+/* start */
+#start{align-items:center;justify-content:center;text-align:center;gap:14px}
+.logo{font-size:78px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-6deg)}}
+h1{margin:0;font-size:38px;color:#fff;text-shadow:0 4px 0 #137a31,0 0 20px rgba(0,0,0,.2)}
+h1 .en{font-size:42px}
+.sub{font-size:18px;font-weight:700;color:#0b4a20;background:rgba(255,255,255,.7);padding:8px 14px;border-radius:14px}
+#nameIn{font-size:24px;text-align:center;padding:10px;border-radius:14px;border:4px solid var(--y);width:220px;font-weight:800;outline:none}
+/* hub */
+.polly{display:flex;align-items:flex-start;gap:8px;margin:4px 0 8px}
+#hub .bubble{font-size:15px;min-height:44px;padding:7px 11px}
+.polly .bird{font-size:46px;line-height:1;animation:bob 2.4s ease-in-out infinite;cursor:pointer}
+.bubble{flex:1;background:#fff;border-radius:18px;border-top-right-radius:4px;padding:9px 12px;font-size:16px;font-weight:600;line-height:1.35;box-shadow:0 4px 0 rgba(0,0,0,.12);min-height:52px}
+.world{background:rgba(255,255,255,.35);border-radius:22px;padding:10px;flex:1;display:flex;flex-direction:column;min-height:0}
+.wtitle{text-align:center;font-weight:900;font-size:21px;color:#0b4a20;margin-bottom:8px}
+.stations{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0}
+.st{border-radius:20px;padding:8px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 5px 0 rgba(0,0,0,.25);position:relative;transition:transform .1s}
+.st:active{transform:scale(.96)}
+.st .ic{font-size:clamp(34px,7vh,52px);line-height:1.1}
+.st .nm{font-weight:900;font-size:18px}
+.st .ennm{font-size:14px;opacity:.95}
+.st .stars{font-size:15px;letter-spacing:1px}
+.st.big{grid-column:span 2;flex-direction:row;gap:14px}
+.st.big .ic{font-size:clamp(44px,9vh,64px)}
+.st.locked{filter:grayscale(.7);opacity:.75}
+.st .lock{position:absolute;top:6px;left:8px;font-size:20px}
+.wtabs{display:flex;gap:6px;margin-bottom:8px}
+.wtab{flex:1;background:rgba(255,255,255,.6);border-radius:14px;padding:5px 2px;text-align:center;font-size:13px;font-weight:800;color:#355;box-shadow:0 3px 0 rgba(0,0,0,.12);line-height:1.2}
+.wtab .we{font-size:22px;display:block}
+.wtab.on{background:#fff;color:var(--p);box-shadow:0 0 0 3px var(--y),0 3px 0 rgba(0,0,0,.15)}
+.vidBtn{margin-top:8px;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;border-radius:18px;padding:8px 14px;box-shadow:0 5px 0 rgba(0,0,0,.22);text-align:right;position:relative}
+.vidBtn .vi{font-size:34px}
+.vidBtn b{font-size:18px}.vidBtn small{font-size:14px;opacity:.95}
+.vnew{position:absolute;left:12px;top:50%;transform:translateY(-50%);background:var(--y);color:#7a3d00;font-weight:900;border-radius:10px;padding:3px 8px;font-size:13px;animation:pulse 1.2s infinite}
+/* videos */
+.vcard{background:#fff;border-radius:22px;padding:14px;text-align:center;box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.vcard .tag{display:inline-block;background:#ffe1e1;color:#c00;font-weight:900;border-radius:10px;padding:3px 10px;font-size:14px}
+.vcard .ve{font-size:64px;line-height:1.2}
+.vcard .vt{font-size:24px;font-weight:900;color:#2a1a5e}
+.vcard .vh{font-size:16px;font-weight:600;color:#555;margin:2px 0 4px}
+.vcard .vch{font-size:13px;color:#888;font-weight:700}
+.vcard a{text-decoration:none;display:inline-block;margin-top:10px}
+.vcard .alt{display:block;font-size:13px;color:#7b2ff7;font-weight:700;margin-top:8px}
+.vlistT{font-weight:900;color:#0b4a20;margin:10px 4px 6px;font-size:16px}
+.vlist{flex:1;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+.vit{background:rgba(255,255,255,.9);border-radius:16px;padding:8px;display:flex;align-items:center;gap:8px;box-shadow:0 3px 0 rgba(0,0,0,.12);text-align:right;border:3px solid transparent}
+.vit.sel{border-color:var(--y);background:#fffbe6}
+.vit .e{font-size:28px}.vit .t{font-weight:900;font-size:14px;color:#2a1a5e}.vit .ok{font-size:12px;color:#16a34a;font-weight:800}
+/* sling */
+#sling{padding:0}
+#slingCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.hud{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:10px;right:10px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.hud .row{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.hud .back,.hud button{pointer-events:auto}
+.target{align-self:center;background:linear-gradient(135deg,#7b2ff7,#ff4fa3);color:#fff;font-weight:900;font-size:24px;padding:8px 20px;border-radius:18px;box-shadow:0 5px 0 rgba(0,0,0,.25);text-align:center}
+.target small{display:block;font-size:13px;opacity:.9;font-weight:700}
+.tut{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 26px);left:0;right:0;text-align:center;pointer-events:none}
+.tut span{background:rgba(0,0,0,.6);color:#fff;font-weight:800;padding:8px 14px;border-radius:14px;font-size:17px}
+.petPick{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:calc(env(safe-area-inset-top) + 60px) 14px calc(env(safe-area-inset-bottom) + 14px);background:linear-gradient(180deg,#7fe0ff,#b8f29a 50%,#2fae4e)}
+.petPick .pt{font-size:28px;font-weight:900;color:#fff;text-shadow:0 3px 0 #137a31}
+.petPick .ps{font-size:16px;font-weight:700;color:#0b4a20;background:rgba(255,255,255,.7);padding:5px 12px;border-radius:12px}
+.petGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-top:6px}
+.pet{background:#fff;border-radius:20px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;box-shadow:0 5px 0 rgba(0,0,0,.18);border:4px solid transparent;transition:transform .1s}
+.pet:active{transform:scale(.94)}
+.pet.sel{border-color:var(--y);background:#fffbe6}
+.pet .pe{font-size:clamp(36px,6.5vh,52px);line-height:1.15}
+.pet .en{font-weight:900;font-size:17px;color:var(--p)}
+.pet small{font-size:13px;color:#666;font-weight:700}
+/* memory */
+.mgrid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:9px;min-height:0;perspective:900px}
+.card{position:relative;transform-style:preserve-3d;transition:transform .45s;cursor:pointer}
+.card.flip{transform:rotateY(180deg)}
+.card .f,.card .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.card .f{background:repeating-linear-gradient(45deg,#22b14c 0 12px,#1d9a42 12px 24px);font-size:36px;border:3px solid #fff}
+.card .b{background:#fff;transform:rotateY(180deg);border:4px solid var(--y);font-size:clamp(34px,7vh,50px)}
+.card .b.word{font-size:clamp(17px,4.6vw,24px);font-weight:900;color:var(--p)}
+.card.match .b{border-color:var(--g);background:#eaffef}
+.card.match{animation:pop .4s}
+@keyframes pop{50%{transform:rotateY(180deg) scale(1.1)}}
+/* quiz */
+.qwrap{flex:1;display:flex;flex-direction:column;gap:10px;min-height:0}
+.dots{display:flex;gap:5px;justify-content:center}
+.dots i{width:22px;height:8px;border-radius:5px;background:rgba(255,255,255,.6)}
+.dots i.ok{background:var(--g)}.dots i.no{background:var(--r)}.dots i.now{background:var(--y)}
+.qbox{background:#fff;border-radius:22px;padding:14px;text-align:center;box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.qbox .qe{font-size:25px;font-weight:900;color:#2a1a5e;line-height:1.3}
+.qbox .qh{font-size:16px;color:#666;margin-top:6px;min-height:22px;font-weight:600}
+.blank{display:inline-block;min-width:70px;border-bottom:4px dashed var(--p);color:var(--g)}
+.mini{background:#f1e9ff;border-radius:12px;padding:5px 10px;font-size:15px;font-weight:800;margin:8px 4px 0;color:var(--p)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{font-size:22px;font-weight:900;padding:14px 6px;border-radius:18px;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.opt:nth-child(1){background:#3b82f6}.opt:nth-child(2){background:#f59e0b}.opt:nth-child(3){background:#ec4899}.opt:nth-child(4){background:#10b981}
+.opt.right{background:var(--g)!important;animation:pulse .5s}
+.opt.wrong{background:var(--r)!important;opacity:.85}
+.opt.dim{opacity:.4}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.fb{background:#fffbe6;border:3px solid var(--y);border-radius:20px;padding:12px;font-size:17px;line-height:1.45;font-weight:600;display:none}
+.fb.on{display:block;animation:slide .3s}
+@keyframes slide{from{transform:translateY(20px);opacity:0}}
+.fb b.v{font-size:20px}
+.fb .nx{display:block;margin:10px auto 0}
+/* story */
+.story{flex:1;overflow:auto;background:#fff;border-radius:22px;padding:12px;box-shadow:0 5px 0 rgba(0,0,0,.15);-webkit-overflow-scrolling:touch}
+.sent{padding:8px 4px;border-bottom:2px dashed #eee}
+.sent .se{font-size:20px;font-weight:700;color:#2a1a5e;line-height:1.5;text-align:left}
+.sent .se w{cursor:pointer;border-radius:6px;padding:0 1px}
+.sent .se w:active,.sent .se w.hl{background:#ffe680}
+.sent .tools{display:flex;gap:6px;margin-top:4px}
+.sent .tools button{background:#f1e9ff;border-radius:10px;padding:4px 10px;font-size:14px;font-weight:800;color:var(--p)}
+.sent .sh{display:none;color:#0b7a33;font-weight:700;font-size:16px;margin-top:4px}
+.sent .sh.on{display:block}
+.dict{margin-top:8px;background:#2a1a5e;color:#fff;border-radius:16px;padding:10px;text-align:center;font-weight:800;font-size:19px;min-height:46px}
+/* result */
+#result{align-items:center;justify-content:center;text-align:center;gap:14px}
+.rcard{background:#fff;border-radius:28px;padding:22px 18px;width:100%;box-shadow:0 8px 0 rgba(0,0,0,.15)}
+.rstars{font-size:54px;letter-spacing:4px}
+.rstars span{display:inline-block;animation:starIn .5s both}
+@keyframes starIn{from{transform:scale(0) rotate(-180deg)}}
+.rt{font-size:28px;font-weight:900;color:var(--p);margin:6px 0}
+.rl{font-size:17px;font-weight:600;color:#444;line-height:1.5}
+.rbtns{display:flex;gap:10px;justify-content:center;margin-top:14px}
+/* toast */
+#toast{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(.6);background:rgba(42,26,94,.94);color:#fff;font-weight:900;font-size:22px;padding:12px 20px;border-radius:18px;opacity:0;transition:all .25s;pointer-events:none;z-index:50;text-align:center;max-width:88%;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+#toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#toast.good{background:rgba(22,150,60,.95)}#toast.bad{background:rgba(220,60,60,.95)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+#player{position:fixed;inset:0;z-index:60;background:rgba(10,20,40,.88);display:none;align-items:center;justify-content:center;padding:14px}
+#player.on{display:flex}
+.pbox{width:100%;max-width:640px;position:relative;text-align:center}
+.pframe{position:relative;width:100%;padding-top:56.25%;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 5px var(--y)}
+.pframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pclose{position:absolute;top:-54px;left:0;width:46px;height:46px;border-radius:50%;background:#fff;font-size:22px;font-weight:900;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.palt{display:inline-block;margin-top:14px;color:#ffe680;font-weight:800;font-size:15px}
+.credit{font-size:13px;color:#0b4a20;font-weight:700;opacity:.8}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- START -->
+<section class="screen on" id="start">
+  <div class="logo">🐒</div>
+  <h1><span class="en">Jungle English</span><br>ג'ונגל המילים</h1>
+  <div class="sub">קופצים, משחקים ולומדים אנגלית! 🌴</div>
+  <input id="nameIn" maxlength="12" placeholder="השם שלך" value="אמילי">
+  <button class="btn" id="goBtn">יאללה לג'ונגל! 🌴</button>
+  <div class="credit">עם התוכי Polly 🦜 שיודע לדבר אנגלית (בערך)</div>
+</section>
+
+<!-- HUB -->
+<section class="screen" id="hub">
+  <div class="topbar">
+    <div class="pill" id="hubName">👧 אמילי</div>
+    <div class="pill">⭐ <span id="hubStars">0</span></div>
+    <div class="pill">🍌 <span id="hubCoins">0</span></div>
+  </div>
+  <div class="polly">
+    <div class="bird" id="pollyBird">🦜</div>
+    <div class="bubble" id="pollyTxt"></div>
+  </div>
+  <div class="wtabs" id="wTabs"></div>
+  <div class="world">
+    <div class="wtitle" id="wTitle"></div>
+    <div class="stations">
+      <button class="st big" style="background:linear-gradient(135deg,#ff7a00,#ff4fa3)" data-g="sling">
+        <div class="ic">🐒</div>
+        <div><div class="nm">קלע קונג</div><div class="ennm en">Sling Kong English</div><div class="stars" data-s="sling"></div></div>
+      </button>
+      <button class="st" style="background:linear-gradient(135deg,#7b2ff7,#3b82f6)" data-g="memory">
+        <div class="ic">🃏</div><div class="nm">זיכרון</div><div class="ennm en">Memory</div><div class="stars" data-s="memory"></div>
+      </button>
+      <button class="st" style="background:linear-gradient(135deg,#10b981,#0ea5e9)" data-g="trivia">
+        <div class="ic">❓</div><div class="nm">טריוויה</div><div class="ennm en">Trivia</div><div class="stars" data-s="trivia"></div>
+      </button>
+      <button class="st" style="background:linear-gradient(135deg,#f59e0b,#ef4444)" data-g="sent">
+        <div class="ic">✏️</div><div class="nm">השלמת משפטים</div><div class="ennm en">Fill the Gap</div><div class="stars" data-s="sent"></div>
+      </button>
+      <button class="st" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)" data-g="story" id="storyBtn">
+        <div class="ic">📖</div><div class="nm">סיפור</div><div class="ennm en">Captain Kong</div><div class="stars" data-s="story"></div>
+      </button>
+    </div>
+  </div>
+  <button class="vidBtn" id="vidBtn"><span class="vi">📺</span><span><b>הקליפ של היום</b><br><small id="vidToday"></small></span><span class="vnew" id="vidNew">חדש!</span></button>
+</section>
+
+<!-- VIDEOS -->
+<section class="screen" id="videos">
+  <div class="topbar">
+    <button class="back" data-back>➜</button>
+    <div class="pill">📺 סרטונים באנגלית</div>
+    <div class="pill">🍌 <span id="vCoins">0</span></div>
+  </div>
+  <div class="vcard" id="vCard"></div>
+  <div class="vlistT">🎬 כל הסרטונים – בחרי אחד:</div>
+  <div class="vlist" id="vList"></div>
+</section>
+
+<!-- SLING -->
+<section class="screen" id="sling">
+  <canvas id="slingCanvas"></canvas>
+  <div class="hud">
+    <div class="row">
+      <button class="back" data-back>➜</button>
+      <div class="pill" id="slHearts">❤️❤️❤️</div>
+      <div class="pill" id="slProg">0/10</div>
+      <div class="pill">🍌 <span id="slCoins">0</span></div>
+    </div>
+    <div class="target" id="slTarget"></div>
+  </div>
+  <div class="tut" id="slTut"><span>👆 גררי אחורה ושחררי כדי לקפוץ!</span></div>
+  <div class="petPick" id="petPick">
+    <button class="back" data-back style="position:absolute;top:calc(env(safe-area-inset-top) + 10px);right:12px">➜</button>
+    <div class="pt">בחרי את הדמות שלך! 🐾</div>
+    <div class="ps">כל חיה – והשם שלה באנגלית 😉</div>
+    <div class="petGrid" id="petGrid"></div>
+  </div>
+</section>
+
+<!-- MEMORY -->
+<section class="screen" id="memory">
+  <div class="topbar">
+    <button class="back" data-back>➜</button>
+    <div class="pill">🃏 התאימי ציור למילה</div>
+    <div class="pill">צעדים: <span id="mMoves">0</span></div>
+  </div>
+  <div class="mgrid" id="mGrid"></div>
+</section>
+
+<!-- QUIZ (trivia + sentences) -->
+<section class="screen" id="quiz">
+  <div class="topbar">
+    <button class="back" data-back>➜</button>
+    <div class="pill" id="qTitle"></div>
+    <div class="pill">🍌 <span id="qCoins">0</span></div>
+  </div>
+  <div class="qwrap">
+    <div class="dots" id="qDots"></div>
+    <div class="qbox">
+      <div class="qe en" id="qE"></div>
+      <div class="qh" id="qH"></div>
+      <div><button class="mini" id="qSay">🔊 הקשבה</button><button class="mini" id="qHeBtn">👀 מה זה אומר?</button></div>
+    </div>
+    <div class="opts" id="qOpts"></div>
+    <div class="fb" id="qFb"></div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="screen" id="storyS">
+  <div class="topbar">
+    <button class="back" data-back>➜</button>
+    <div class="pill">📖 <span class="en" id="storyTitle"></span></div>
+  </div>
+  <div class="story" id="storyBox"></div>
+  <div class="dict" id="dict">👆 לחצי על מילה כדי לשמוע ולתרגם</div>
+  <button class="btn purple" id="storyQ" style="margin-top:10px">סיימתי לקרוא! לשאלות ➜</button>
+</section>
+
+<!-- RESULT -->
+<section class="screen" id="result">
+  <div class="rcard">
+    <div class="rstars" id="rStars"></div>
+    <div class="rt" id="rTitle"></div>
+    <div class="rl" id="rLines"></div>
+    <div class="rbtns">
+      <button class="btn green" id="rAgain">🔁 שוב</button>
+      <button class="btn purple" id="rMap">🗺️ למפה</button>
+    </div>
+  </div>
+  <div class="polly" style="width:100%"><div class="bird">🦜</div><div class="bubble" id="rPolly"></div></div>
+</section>
+
+</div>
+<div id="player"><div class="pbox"><button class="pclose" id="pClose">✖</button><div class="pframe" id="pFrame"></div><a class="palt" id="pAlt" href="#" target="_blank" rel="noopener">הסרטון לא עולה? לפתוח ביוטיוב</a></div></div>
+<div id="toast"></div>
+<canvas id="fx"></canvas>
+
+<script>
+"use strict";
+/* ================= DATA ================= */
+const ANIMALS=[
+ {en:"lion",he:"אריה",e:"🦁"},{en:"monkey",he:"קוף",e:"🐒"},{en:"elephant",he:"פיל",e:"🐘"},
+ {en:"giraffe",he:"ג'ירפה",e:"🦒"},{en:"zebra",he:"זברה",e:"🦓"},{en:"tiger",he:"טיגריס",e:"🐯"},
+ {en:"snake",he:"נחש",e:"🐍"},{en:"bird",he:"ציפור",e:"🐦"},{en:"fish",he:"דג",e:"🐟"},
+ {en:"cat",he:"חתול",e:"🐱"},{en:"dog",he:"כלב",e:"🐶"},{en:"rabbit",he:"ארנב",e:"🐰"},
+ {en:"horse",he:"סוס",e:"🐴"},{en:"cow",he:"פרה",e:"🐮"},{en:"bear",he:"דוב",e:"🐻"},
+ {en:"frog",he:"צפרדע",e:"🐸"},{en:"turtle",he:"צב",e:"🐢"},{en:"parrot",he:"תוכי",e:"🦜"},
+ {en:"owl",he:"ינשוף",e:"🦉"},{en:"crocodile",he:"תנין",e:"🐊"},{en:"penguin",he:"פינגווין",e:"🐧"},
+ {en:"mouse",he:"עכבר",e:"🐭"},{en:"sheep",he:"כבשה",e:"🐑"},{en:"duck",he:"ברווז",e:"🦆"},
+ {en:"bee",he:"דבורה",e:"🐝"},{en:"butterfly",he:"פרפר",e:"🦋"},{en:"whale",he:"לוויתן",e:"🐋"},
+ {en:"pig",he:"חזיר",e:"🐷"},{en:"chicken",he:"תרנגולת",e:"🐔"},{en:"octopus",he:"תמנון",e:"🐙"}
+];
+const TRIVIA=[
+ {q:"Which animal has a very long neck?",h:"לאיזו חיה יש צוואר ארוך מאוד?",o:["giraffe","snake","duck","frog"],f:"<b>giraffe</b> = ג'ירפה 🦒. לג'ירפה יש 7 חוליות בצוואר – בדיוק כמו לך! רק שאצלה כל אחת ענקית."},
+ {q:"What does a bee make?",h:"מה הדבורה מכינה?",o:["honey","milk","juice","pizza"],f:"<b>honey</b> = דבש 🍯. דבורה אחת מייצרת בכל החיים שלה פחות מכפית דבש. אז תודה, דבורים!"},
+ {q:"How many legs does a spider have?",h:"כמה רגליים יש לעכביש?",o:["eight","six","four","ten"],f:"<b>eight</b> = שמונה 🕷️. בגלל זה עכביש הוא לא חרק – לחרקים יש רק 6 רגליים."},
+ {q:"Where does a fish live?",h:"איפה גר דג?",o:["in the water","in a tree","in the sky","in a car"],f:"<b>in the water</b> = במים 🐟. דג בתוך מכונית? זה כבר סרט מצויר 😂"},
+ {q:"Which animal is the biggest?",h:"איזו חיה הכי גדולה?",o:["blue whale","elephant","giraffe","mouse"],f:"<b>blue whale</b> = לוויתן כחול 🐋. זו החיה הכי גדולה שחיה אי פעם על כדור הארץ – יותר גדולה מכל דינוזאור!"},
+ {q:"Which animal is called \"the king of the jungle\"?",h:"איזו חיה נקראת \"מלך הג'ונגל\"?",o:["lion","monkey","cow","frog"],f:"<b>lion</b> = אריה 🦁. ומה שמצחיק: אריות בכלל לא גרים בג'ונגל, אלא בסוואנה!"},
+ {q:"A baby dog is called a...",h:"כלב תינוק נקרא...",o:["puppy","kitten","chick","calf"],f:"<b>puppy</b> = גור כלבים 🐶. וגור חתולים? <b>kitten</b> 🐱"},
+ {q:"What do pandas love to eat?",h:"מה פנדות אוהבות לאכול?",o:["bamboo","pizza","fish","chocolate"],f:"<b>bamboo</b> = במבוק 🐼. פנדה יכולה לאכול יותר מ-10 שעות ביום – כמו ארוחת שישי שלא נגמרת!"},
+ {q:"Which animal can fly?",h:"איזו חיה יכולה לעוף?",o:["bird","fish","cat","cow"],f:"<b>bird</b> = ציפור 🐦. ידעת? היונק היחיד שבאמת עף הוא העטלף – <b>bat</b> 🦇"},
+ {q:"Every zebra has different...",h:"לכל זברה יש ... שונים",o:["stripes","wings","shoes","hats"],f:"<b>stripes</b> = פסים 🦓. הפסים של כל זברה מיוחדים רק לה – כמו טביעת אצבע!"},
+ {q:"Which animal is very slow?",h:"איזו חיה איטית מאוד?",o:["turtle","cheetah","horse","rabbit"],f:"<b>turtle</b> = צב 🐢. ו-<b>cheetah</b> (ברדלס) הוא החיה היבשתית הכי מהירה בעולם! 🐆"},
+ {q:"What sound does a cow make?",h:"איזה קול עושה פרה?",o:["moo","woof","meow","quack"],f:"<b>moo!</b> 🐮 באנגלית כלב עושה <b>woof</b>, חתול <b>meow</b> וברווז <b>quack</b> 🦆"},
+ {q:"Which animal has a trunk?",h:"לאיזו חיה יש חדק?",o:["elephant","lion","owl","frog"],f:"<b>trunk</b> = חדק 🐘. פיל משתמש בחדק כמו יד – וגם כמו מקלחת!"}
+];
+const SENTS=[
+ {s:"The cat ___ milk.",o:["drinks","drink","drinking"],h:"החתול שותה חלב.",t:"כשמדברים על <b>he / she / it</b> (הוא, היא, זה) – מוסיפים <b>s</b> לפועל. <b>drinks</b> 🐍 סססס!"},
+ {s:"I ___ a dog.",o:["have","has","am"],h:"יש לי כלב.",t:"עם <b>I</b> אומרים <b>have</b>. עם he / she אומרים <b>has</b>."},
+ {s:"Elephants ___ big.",o:["are","is","am"],h:"פילים הם גדולים.",t:"הרבה פילים (רבים) ← <b>are</b>. פיל אחד ← <b>is</b>. ואני ← <b>am</b>!"},
+ {s:"This is ___ elephant.",o:["an","a","two"],h:"זה פיל.",t:"לפני מילה שמתחילה בצליל <b>a, e, i, o, u</b> אומרים <b>an</b>: an elephant, an owl 🦉"},
+ {s:"I see two ___.",o:["lions","lion","lionses"],h:"אני רואה שני אריות.",t:"ברבים מוסיפים <b>s</b>: lion ← <b>lions</b>. ו-lionses? זו כבר שפת תוכים 😂"},
+ {s:"The fish lives ___ the water.",o:["in","at","of"],h:"הדג גר בתוך המים.",t:"<b>in</b> = בתוך 🐟. in the water, in the box, in the jungle."},
+ {s:"My parrot can ___!",o:["talk","talks","talking"],h:"התוכי שלי יודע לדבר!",t:"אחרי <b>can</b> הפועל נשאר רגיל, בלי s: can talk, can fly. (ואני באמת יודע! 🦜)"},
+ {s:"A lion is ___ than a cat.",o:["bigger","big","biggest"],h:"אריה גדול יותר מחתול.",t:"משווים: big ← <b>bigger</b> (גדול יותר) ← biggest (הכי גדול)."},
+ {s:"Look! The monkey ___ eating a banana.",o:["is","are","am"],h:"תראי! הקוף אוכל בננה.",t:"The monkey = הוא, אז <b>is</b>. 🐒🍌"},
+ {s:"Frogs ___ jump very high.",o:["can","is","does"],h:"צפרדעים יכולות לקפוץ ממש גבוה.",t:"<b>can</b> = יכול / יכולים 🐸. Frogs can jump!"},
+ {s:"We ___ to the zoo every summer.",o:["go","goes","going"],h:"אנחנו הולכים לגן החיות כל קיץ.",t:"עם <b>we / you / they</b> – בלי s: we <b>go</b>."},
+ {s:"___ is your favorite animal?",o:["What","Who","When"],h:"מה החיה האהובה עלייך?",t:"<b>What</b> = מה, <b>Who</b> = מי, <b>When</b> = מתי."}
+];
+const STORY=[
+ ["Captain Kong is a funny monkey.","קפטן קונג הוא קוף מצחיק."],
+ ["He lives in a big green jungle.","הוא גר בג'ונגל ירוק וגדול."],
+ ["Every morning, he eats ten bananas.","בכל בוקר הוא אוכל עשר בננות."],
+ ["One day, Kong cannot find his bananas!","יום אחד, קונג לא מוצא את הבננות שלו!"],
+ ["\"Where are my bananas?\" he shouts.","\"איפה הבננות שלי?\" הוא צועק."],
+ ["Polly the parrot laughs: \"Look up, Captain!\"","התוכי פולי צוחק: \"תסתכל למעלה, קפטן!\""],
+ ["The bananas are on his head! 🍌","הבננות על הראש שלו! 🍌"]
+];
+const STORYQ=[
+ {q:"What does Kong eat every morning?",h:"מה קונג אוכל כל בוקר?",o:["ten bananas","ten pizzas","ten fish"],f:"<b>ten bananas</b> = עשר בננות 🍌 (וזה רק לארוחת בוקר!)"},
+ {q:"Who laughs?",h:"מי צוחק?",o:["Polly the parrot","the lion","Kong's mom"],f:"<b>Polly the parrot</b> – זה אני! 🦜 ואני עדיין צוחק."},
+ {q:"Where are the bananas?",h:"איפה הבננות?",o:["on his head","in the water","in the car"],f:"<b>on his head</b> = על הראש שלו. <b>on</b> = על 😂"}
+];
+const DICT={captain:"קפטן",kong:"קונג",is:"הוא / היא (is)",a:"אחד / אחת",funny:"מצחיק",monkey:"קוף",he:"הוא",lives:"גר",in:"בתוך",big:"גדול",green:"ירוק",jungle:"ג'ונגל",every:"כל",morning:"בוקר",eats:"אוכל",ten:"עשר",bananas:"בננות",one:"אחד",day:"יום",cannot:"לא יכול",find:"למצוא",his:"שלו",where:"איפה",are:"הם (are)",my:"שלי",shouts:"צועק",polly:"פולי",the:"ה־",parrot:"תוכי",laughs:"צוחק",look:"תסתכל",up:"למעלה",on:"על",head:"ראש"};
+const JOKES=[
+ "למה אסור לשחק קלפים בג'ונגל? 🐆 יש שם יותר מדי <span class='en'>cheetahs</span> – נשמע כמו <span class='en'>cheaters</span>, רמאים! 😂",
+ "<span class='en'>Why are fish so smart?</span> 🐟 <span class='en'>Because they live in schools!</span> (באנגלית school זה גם בית ספר וגם להקת דגים!)",
+ "<span class='en'>What do you call a bear with no teeth?</span> 🐻 <span class='en'>A gummy bear!</span> (בלי שיניים נשארים רק חניכיים – gums!)",
+ "<span class='en'>What do you call a sleeping dinosaur?</span> 🦖 <span class='en'>A dino-snore!</span> (snore = נחירה 😴)",
+ "<span class='en'>What do you call a cow with no legs?</span> 🐮 <span class='en'>Ground beef!</span> (היא פשוט על הרצפה 😂)",
+ "אני Polly, ואני מדבר אנגלית מצוין! <span class='en'>I am a potato.</span> רגע... זה לא יצא נכון 🥔🦜"
+];
+/* ---------- FOOD WORLD ---------- */
+const FOOD=[
+ {en:"apple",he:"תפוח",e:"🍎"},{en:"banana",he:"בננה",e:"🍌"},{en:"orange",he:"תפוז",e:"🍊"},
+ {en:"grapes",he:"ענבים",e:"🍇"},{en:"strawberry",he:"תות",e:"🍓"},{en:"watermelon",he:"אבטיח",e:"🍉"},
+ {en:"lemon",he:"לימון",e:"🍋"},{en:"cherry",he:"דובדבן",e:"🍒"},{en:"pineapple",he:"אננס",e:"🍍"},
+ {en:"pear",he:"אגס",e:"🍐"},{en:"carrot",he:"גזר",e:"🥕"},{en:"tomato",he:"עגבנייה",e:"🍅"},
+ {en:"potato",he:"תפוח אדמה",e:"🥔"},{en:"corn",he:"תירס",e:"🌽"},{en:"cucumber",he:"מלפפון",e:"🥒"},
+ {en:"broccoli",he:"ברוקולי",e:"🥦"},{en:"bread",he:"לחם",e:"🍞"},{en:"cheese",he:"גבינה",e:"🧀"},
+ {en:"egg",he:"ביצה",e:"🥚"},{en:"milk",he:"חלב",e:"🥛"},{en:"pizza",he:"פיצה",e:"🍕"},
+ {en:"cake",he:"עוגה",e:"🍰"},{en:"cookie",he:"עוגייה",e:"🍪"},{en:"ice cream",he:"גלידה",e:"🍦"},
+ {en:"honey",he:"דבש",e:"🍯"},{en:"rice",he:"אורז",e:"🍚"},{en:"soup",he:"מרק",e:"🍲"},
+ {en:"sandwich",he:"כריך",e:"🥪"},{en:"chocolate",he:"שוקולד",e:"🍫"},{en:"popcorn",he:"פופקורן",e:"🍿"}
+];
+const FOOD_TRIVIA=[
+ {q:"What color is a banana?",h:"באיזה צבע בננה?",o:["yellow","blue","purple","black"],f:"<b>yellow</b> = צהוב 🍌. ידעת? אשכול בננות נקרא באנגלית <b>hand</b> – יד! וכל בננה היא <b>finger</b> – אצבע."},
+ {q:"Which food comes from a cow?",h:"איזה מזון מגיע מפרה?",o:["milk","apple","bread","rice"],f:"<b>milk</b> = חלב 🐮🥛. ומחלב מכינים גם <b>cheese</b> – גבינה!"},
+ {q:"What do we use to make popcorn?",h:"ממה מכינים פופקורן?",o:["corn","rice","carrots","eggs"],f:"<b>corn</b> = תירס 🌽. הגרגר מתפוצץ כי המים שבתוכו הופכים לאדים – פופ! 🍿"},
+ {q:"Which fruit has seeds on the outside?",h:"לאיזה פרי יש זרעים מבחוץ?",o:["strawberry","banana","orange","grapes"],f:"<b>strawberry</b> = תות 🍓. על תות אחד יש בערך 200 זרעים קטנטנים!"},
+ {q:"Which vegetable is orange?",h:"איזה ירק כתום?",o:["carrot","cucumber","broccoli","corn"],f:"<b>carrot</b> = גזר 🥕. לפני מאות שנים היו הרבה גזרים סגולים וצהובים!"},
+ {q:"Which fruit is green outside and red inside?",h:"איזה פרי ירוק מבחוץ ואדום מבפנים?",o:["watermelon","lemon","pear","banana"],f:"<b>watermelon</b> = אבטיח 🍉 – הוא כמעט כולו מים! (<b>water</b> = מים)"},
+ {q:"Which fruit is very sour?",h:"איזה פרי חמוץ מאוד?",o:["lemon","banana","watermelon","grapes"],f:"<b>lemon</b> = לימון 🍋. <b>sour</b> = חמוץ, <b>sweet</b> = מתוק 😝"},
+ {q:"An egg comes from a...",h:"ביצה מגיעה מ...",o:["chicken","cow","tree","car"],f:"<b>chicken</b> = תרנגולת 🐔🥚. ומה בא קודם – התרנגולת או הביצה? 🤔"},
+ {q:"Pizza comes from which country?",h:"מאיזו מדינה הגיעה הפיצה?",o:["Italy","Japan","Brazil","China"],f:"<b>Italy</b> = איטליה 🇮🇹. הפיצה המודרנית נולדה בעיר נאפולי!"},
+ {q:"Which one is NOT a fruit?",h:"מה מהם הוא לא פרי?",o:["bread","apple","pear","cherry"],f:"<b>bread</b> = לחם 🍞 – עושים אותו מקמח, הוא לא גדל על עץ (רק בחלומות של Polly 🦜)."},
+ {q:"Which one is a drink?",h:"מה מהם הוא משקה?",o:["juice","cake","cookie","rice"],f:"<b>juice</b> = מיץ 🧃. <b>drink</b> = לשתות, <b>eat</b> = לאכול."},
+ {q:"Chocolate is made from...",h:"שוקולד עשוי מ...",o:["cocoa beans","carrots","apples","fish"],f:"<b>cocoa beans</b> = פולי קקאו 🍫. הם גדלים על עץ הקקאו במקומות חמים!"}
+];
+const FOOD_SENTS=[
+ {s:"I ___ pizza!",o:["like","likes","liking"],h:"אני אוהבת פיצה!",t:"עם <b>I</b> – בלי s: I like. עם she – she likes 🍕"},
+ {s:"She ___ an apple every day.",o:["eats","eat","eating"],h:"היא אוכלת תפוח כל יום.",t:"<b>she</b> ← מוסיפים s: <b>eats</b> 🍎"},
+ {s:"Can I have ___ orange, please?",o:["an","a","two"],h:"אפשר לקבל תפוז, בבקשה?",t:"orange מתחיל ב-o, אז <b>an</b> orange 🍊. ו-<b>please</b> = בבקשה – מילת קסם!"},
+ {s:"There ___ three cookies on the plate.",o:["are","is","am"],h:"יש שלוש עוגיות בצלחת.",t:"שלוש עוגיות = רבים ← <b>there are</b> 🍪"},
+ {s:"I don't ___ broccoli.",o:["like","likes","liking"],h:"אני לא אוהבת ברוקולי.",t:"אחרי <b>don't</b> הפועל נשאר רגיל: I don't like. (סליחה, ברוקולי 🥦)"},
+ {s:"Do you want ___ water?",o:["some","a","many"],h:"את רוצה קצת מים?",t:"<b>some</b> = קצת: some water, some milk 💧"},
+ {s:"Ice cream is ___!",o:["cold","hot","loud"],h:"גלידה קרה!",t:"<b>cold</b> = קר, <b>hot</b> = חם 🍦"},
+ {s:"We eat soup ___ a spoon.",o:["with","on","under"],h:"אנחנו אוכלים מרק עם כף.",t:"<b>with</b> = עם 🥄"},
+ {s:"My mom ___ cooking dinner.",o:["is","are","am"],h:"אמא שלי מבשלת ארוחת ערב.",t:"my mom = she ← <b>is</b> 🍳"},
+ {s:"How ___ apples do you have?",o:["many","much","more"],h:"כמה תפוחים יש לך?",t:"דברים שאפשר לספור ← <b>how many</b> 🍎🍎🍎"},
+ {s:"I am ___! I want a sandwich.",o:["hungry","sleepy","cold"],h:"אני רעבה! אני רוצה כריך.",t:"<b>hungry</b> = רעב/ה 😋. ו-<b>thirsty</b> = צמא/ה"},
+ {s:"Yesterday I ___ a big cake.",o:["ate","eat","eats"],h:"אתמול אכלתי עוגה גדולה.",t:"<b>yesterday</b> = אתמול ← עבר: eat ← <b>ate</b> 🍰"}
+];
+const FOOD_STORY=[
+ ["Today is Pizza Day at Kong's house!","היום זה יום הפיצה בבית של קונג!"],
+ ["Kong puts cheese and tomatoes on the pizza.","קונג שם גבינה ועגבניות על הפיצה."],
+ ["Polly wants bananas on the pizza.","פולי רוצה בננות על הפיצה."],
+ ["\"Bananas on pizza? Yuck!\" says Kong.","\"בננות על פיצה? איכס!\" אומר קונג."],
+ ["They make two pizzas: one with cheese, one with bananas.","הם מכינים שתי פיצות: אחת עם גבינה, אחת עם בננות."],
+ ["Kong tries the banana pizza...","קונג טועם את פיצת הבננות..."],
+ ["\"Mmm! It is yummy!\" 🍕🍌","\"ממ! זה טעים!\" 🍕🍌"]
+];
+const FOOD_STORYQ=[
+ {q:"What does Kong put on the pizza?",h:"מה קונג שם על הפיצה?",o:["cheese and tomatoes","bananas and chocolate","fish and rice"],f:"<b>cheese and tomatoes</b> = גבינה ועגבניות 🧀🍅"},
+ {q:"How many pizzas do they make?",h:"כמה פיצות הם מכינים?",o:["two","one","ten"],f:"<b>two</b> = שתיים 🍕🍕"},
+ {q:"Is the banana pizza yummy?",h:"האם פיצת הבננות טעימה?",o:["Yes, it is!","No, it is yucky.","It is blue."],f:"<b>Yes, it is!</b> – כן! Polly צדק (כמו תמיד 😎🦜)"}
+];
+const FOOD_DICT={today:"היום",pizza:"פיצה",day:"יום",at:"ב־ / אצל",house:"בית",puts:"שם",cheese:"גבינה",and:"ו־",tomatoes:"עגבניות",wants:"רוצה",yuck:"איכס",says:"אומר",they:"הם",make:"מכינים",two:"שתיים",pizzas:"פיצות",with:"עם",tries:"טועם",mmm:"ממ",it:"זה",yummy:"טעים"};
+
+/* ---------- SCHOOL WORLD ---------- */
+const SCHOOL=[
+ {en:"pencil",he:"עיפרון",e:"✏️"},{en:"pen",he:"עט",e:"🖊️"},{en:"book",he:"ספר",e:"📕"},
+ {en:"notebook",he:"מחברת",e:"📓"},{en:"bag",he:"תיק",e:"🎒"},{en:"ruler",he:"סרגל",e:"📏"},
+ {en:"scissors",he:"מספריים",e:"✂️"},{en:"crayon",he:"צבע פסטל",e:"🖍️"},{en:"paintbrush",he:"מכחול",e:"🖌️"},
+ {en:"teacher",he:"מורה",e:"🧑‍🏫"},{en:"student",he:"תלמיד",e:"🧑‍🎓"},{en:"school",he:"בית ספר",e:"🏫"},
+ {en:"chair",he:"כיסא",e:"🪑"},{en:"clock",he:"שעון",e:"🕐"},{en:"computer",he:"מחשב",e:"💻"},
+ {en:"globe",he:"גלובוס",e:"🌍"},{en:"map",he:"מפה",e:"🗺️"},{en:"paper",he:"נייר",e:"📄"},
+ {en:"bell",he:"פעמון",e:"🔔"},{en:"bus",he:"אוטובוס",e:"🚌"},{en:"ball",he:"כדור",e:"⚽"},
+ {en:"music",he:"מוזיקה",e:"🎵"},{en:"art",he:"אמנות",e:"🎨"},{en:"science",he:"מדע",e:"🔬"},
+ {en:"homework",he:"שיעורי בית",e:"📝"},{en:"letter",he:"אות",e:"🔤"},{en:"number",he:"מספר",e:"🔢"},
+ {en:"calendar",he:"לוח שנה",e:"📅"},{en:"magnet",he:"מגנט",e:"🧲"},{en:"lunch",he:"ארוחת צהריים",e:"🍱"}
+];
+const SCHOOL_TRIVIA=[
+ {q:"What do you use to cut paper?",h:"במה גוזרים נייר?",o:["scissors","ruler","pencil","book"],f:"<b>scissors</b> = מספריים ✂️. שימי לב: באנגלית תמיד אומרים scissors ברבים!"},
+ {q:"What do you use to measure a line?",h:"במה מודדים קו?",o:["ruler","pen","bag","bell"],f:"<b>ruler</b> = סרגל 📏. ומצחיק: ruler זה גם שליט – מלך הוא ruler 👑"},
+ {q:"Who teaches the class?",h:"מי מלמד את הכיתה?",o:["teacher","student","dog","doctor"],f:"<b>teacher</b> = מורה 🧑‍🏫, <b>student</b> = תלמיד/ה 🧑‍🎓"},
+ {q:"How many days are in a week?",h:"כמה ימים יש בשבוע?",o:["seven","five","ten","six"],f:"<b>seven</b> = שבעה 📅. Sunday, Monday, Tuesday..."},
+ {q:"Five plus five is...",h:"חמש ועוד חמש זה...",o:["ten","eleven","fifty","nine"],f:"<b>ten</b> = 10. <b>plus</b> = ועוד, <b>minus</b> = פחות ➕➖"},
+ {q:"Which subject is about numbers?",h:"איזה מקצוע עוסק במספרים?",o:["math","music","art","sport"],f:"<b>math</b> = חשבון / מתמטיקה ➗"},
+ {q:"Where do you put your books?",h:"איפה שמים את הספרים?",o:["in your bag","in the fridge","in the sky","on the dog"],f:"<b>in your bag</b> = בתיק 🎒. ספר במקרר? רק אם הוא ספר מגניב 😎"},
+ {q:"What color is a school bus in America?",h:"באיזה צבע אוטובוס של בית ספר באמריקה?",o:["yellow","pink","black","green"],f:"<b>yellow</b> = צהוב 🚌. בוחרים בצהוב כי רואים אותו טוב מרחוק!"},
+ {q:"How many letters are in the English alphabet?",h:"כמה אותיות יש באלף-בית האנגלי?",o:["26","22","30","10"],f:"<b>26</b> אותיות 🔤. ובעברית? 22 אותיות!"},
+ {q:"What does a clock tell you?",h:"מה שעון אומר לך?",o:["the time","a story","a joke","your name"],f:"<b>the time</b> = השעה 🕐. What time is it? = מה השעה?"},
+ {q:"What is the time between lessons called?",h:"איך קוראים לזמן שבין השיעורים?",o:["break","bread","brick","bird"],f:"<b>break</b> = הפסקה ⏰. אל תתבלבלי עם <b>bread</b> – לחם 🍞 (למרות שבהפסקה אוכלים לחם...)"},
+ {q:"Which one can you read?",h:"את מה אפשר לקרוא?",o:["a book","a chair","a ball","a bell"],f:"<b>book</b> = ספר 📕. <b>read</b> = לקרוא, <b>write</b> = לכתוב ✍️"}
+];
+const SCHOOL_SENTS=[
+ {s:"I ___ a student.",o:["am","is","are"],h:"אני תלמידה.",t:"<b>I</b> ← תמיד <b>am</b> 🧑‍🎓"},
+ {s:"This is ___ pencil.",o:["my","me","I"],h:"זה העיפרון שלי.",t:"<b>my</b> = שלי ✏️"},
+ {s:"The books are ___ the bag.",o:["in","at","of"],h:"הספרים בתוך התיק.",t:"<b>in</b> = בתוך 🎒"},
+ {s:"She ___ to school by bus.",o:["goes","go","going"],h:"היא נוסעת לבית הספר באוטובוס.",t:"<b>she</b> ← ל-go מוסיפים <b>es</b>: goes 🚌"},
+ {s:"We ___ English on Monday.",o:["learn","learns","learning"],h:"אנחנו לומדים אנגלית ביום שני.",t:"<b>we</b> ← בלי s: we learn"},
+ {s:"Please ___ the door.",o:["close","closes","closing"],h:"בבקשה, תסגרי את הדלת.",t:"בבקשות והוראות הפועל רגיל: close, open, sit down 🚪"},
+ {s:"___ is your teacher?",o:["Who","What","Where"],h:"מי המורה שלך?",t:"<b>Who</b> = מי, <b>What</b> = מה, <b>Where</b> = איפה"},
+ {s:"I have two ___.",o:["books","book","bookes"],h:"יש לי שני ספרים.",t:"רבים: book ← <b>books</b> 📚"},
+ {s:"There ___ a clock on the wall.",o:["is","are","am"],h:"יש שעון על הקיר.",t:"שעון אחד ← <b>there is</b> 🕐"},
+ {s:"Can you ___ me, please?",o:["help","helps","helping"],h:"את יכולה לעזור לי, בבקשה?",t:"אחרי <b>can</b> הפועל רגיל: can help 🤝"},
+ {s:"I ___ my homework yesterday.",o:["did","do","does"],h:"עשיתי את שיעורי הבית אתמול.",t:"<b>yesterday</b> ← עבר: do ← <b>did</b> 📝"},
+ {s:"My teacher is very ___.",o:["nice","nicely","nices"],h:"המורה שלי מאוד נחמדה.",t:"<b>nice</b> = נחמד/ה 😊"}
+];
+const SCHOOL_STORY=[
+ ["Today is Kong's first day at school.","היום זה היום הראשון של קונג בבית הספר."],
+ ["He has a big red bag.","יש לו תיק אדום וגדול."],
+ ["In the bag, there are three pencils and one banana.","בתיק יש שלושה עפרונות ובננה אחת."],
+ ["The teacher says, \"Please open your books.\"","המורה אומרת: \"בבקשה, פתחו את הספרים.\""],
+ ["Kong opens his bag... but there is no book!","קונג פותח את התיק... אבל אין בו ספר!"],
+ ["Polly flies in with the book: \"You forgot it, Captain!\"","פולי עף פנימה עם הספר: \"שכחת אותו, קפטן!\""],
+ ["Everybody laughs, and Kong eats his banana. 🍌","כולם צוחקים, וקונג אוכל את הבננה שלו. 🍌"]
+];
+const SCHOOL_STORYQ=[
+ {q:"What color is Kong's bag?",h:"באיזה צבע התיק של קונג?",o:["red","blue","green"],f:"<b>red</b> = אדום ❤️🎒"},
+ {q:"What is in the bag?",h:"מה יש בתיק?",o:["three pencils and one banana","a cat","ten books"],f:"<b>three pencils and one banana</b> – שלושה עפרונות ובננה אחת ✏️✏️✏️🍌"},
+ {q:"Who brings the book?",h:"מי מביא את הספר?",o:["Polly the parrot","the teacher","a lion"],f:"<b>Polly the parrot</b> – זה אני, הגיבור! 🦜📕"}
+];
+const SCHOOL_DICT={today:"היום",first:"ראשון",day:"יום",at:"ב־",school:"בית ספר",has:"יש לו",red:"אדום",bag:"תיק",there:"שם / יש (there are)",three:"שלושה",pencils:"עפרונות",and:"ו־",banana:"בננה",teacher:"מורה",says:"אומרת",please:"בבקשה",open:"פתחו",your:"שלכם",books:"ספרים",opens:"פותח",but:"אבל",no:"אין / לא",book:"ספר",flies:"עף",with:"עם",you:"אתה / את",forgot:"שכחת",it:"אותו / זה",everybody:"כולם",laugh:"צוחקים",laughs:"צוחקים"};
+
+/* ---------- FAMILY WORLD ---------- */
+const FAMILY=[
+ {en:"mom",he:"אמא",e:"👩"},{en:"dad",he:"אבא",e:"👨"},{en:"sister",he:"אחות",e:"👧"},
+ {en:"brother",he:"אח",e:"👦"},{en:"baby",he:"תינוק",e:"👶"},{en:"grandma",he:"סבתא",e:"👵"},
+ {en:"grandpa",he:"סבא",e:"👴"},{en:"family",he:"משפחה",e:"👨‍👩‍👧"},{en:"uncle",he:"דוד",e:"🧔"},
+ {en:"friend",he:"חבר",e:"🧑‍🤝‍🧑"},{en:"house",he:"בית",e:"🏠"},{en:"kitchen",he:"מטבח",e:"🍳"},
+ {en:"bathroom",he:"חדר אמבטיה",e:"🛁"},{en:"bed",he:"מיטה",e:"🛏️"},{en:"door",he:"דלת",e:"🚪"},
+ {en:"window",he:"חלון",e:"🪟"},{en:"sofa",he:"ספה",e:"🛋️"},{en:"TV",he:"טלוויזיה",e:"📺"},
+ {en:"phone",he:"טלפון",e:"📱"},{en:"key",he:"מפתח",e:"🔑"},{en:"garden",he:"גינה",e:"🌻"},
+ {en:"car",he:"מכונית",e:"🚗"},{en:"birthday",he:"יום הולדת",e:"🎂"},{en:"gift",he:"מתנה",e:"🎁"},
+ {en:"hug",he:"חיבוק",e:"🤗"},{en:"love",he:"אהבה",e:"❤️"},{en:"happy",he:"שמח",e:"😊"},
+ {en:"sad",he:"עצוב",e:"😢"},{en:"angry",he:"כועס",e:"😠"},{en:"tired",he:"עייף",e:"😴"}
+];
+const FAMILY_TRIVIA=[
+ {q:"Your mother's mother is your...",h:"אמא של אמא שלך היא ה...",o:["grandma","aunt","sister","baby"],f:"<b>grandma</b> = סבתא 👵 (קיצור של grandmother)"},
+ {q:"Your father's brother is your...",h:"האח של אבא שלך הוא ה...",o:["uncle","cousin","grandpa","son"],f:"<b>uncle</b> = דוד 🧔. והאחות של אבא או אמא? <b>aunt</b> – דודה!"},
+ {q:"Where do you sleep?",h:"איפה ישנים?",o:["in the bedroom","in the kitchen","in the car","in the garden"],f:"<b>bedroom</b> = חדר שינה 🛏️. bed = מיטה + room = חדר!"},
+ {q:"Where do you cook food?",h:"איפה מבשלים אוכל?",o:["in the kitchen","in the bathroom","in the bedroom","in the garden"],f:"<b>kitchen</b> = מטבח 🍳"},
+ {q:"What do you say on someone's birthday?",h:"מה אומרים למישהו ביום ההולדת שלו?",o:["Happy birthday!","Good night!","Goodbye!","Excuse me!"],f:"<b>Happy birthday!</b> = יום הולדת שמח! 🎂"},
+ {q:"What do you use to open a door?",h:"במה פותחים דלת?",o:["a key","a spoon","a sock","a cookie"],f:"<b>key</b> = מפתח 🔑. לפתוח דלת עם עוגייה? רק בממלכת הממתקים 🍪"},
+ {q:"How do you feel when you get a gift?",h:"איך מרגישים כשמקבלים מתנה?",o:["happy","sad","angry","sick"],f:"<b>happy</b> = שמח/ה 🎁😊"},
+ {q:"What do you say when you wake up?",h:"מה אומרים כשמתעוררים?",o:["Good morning!","Good night!","Happy birthday!","See you later!"],f:"<b>Good morning</b> = בוקר טוב ☀️. ובלילה? <b>Good night</b> 🌙"},
+ {q:"A boy is your brother. A girl is your...",h:"בן הוא אח שלך. בת היא ה... שלך",o:["sister","brother","uncle","grandpa"],f:"<b>sister</b> = אחות 👧, <b>brother</b> = אח 👦"},
+ {q:"Which room has a shower?",h:"באיזה חדר יש מקלחת?",o:["bathroom","kitchen","bedroom","garden"],f:"<b>bathroom</b> = חדר אמבטיה 🚿. באמריקה bathroom זה גם השירותים!"},
+ {q:"Two babies born together are...",h:"שני תינוקות שנולדו יחד הם...",o:["twins","cousins","friends","parents"],f:"<b>twins</b> = תאומים 👯. ו-<b>twin</b> = תאום!"},
+ {q:"Mom and Dad are your...",h:"אמא ואבא הם ה... שלך",o:["parents","cousins","friends","teachers"],f:"<b>parents</b> = הורים 👨‍👩‍👧"}
+];
+const FAMILY_SENTS=[
+ {s:"This is ___ mother.",o:["my","I","me"],h:"זאת אמא שלי.",t:"<b>my</b> = שלי 👩"},
+ {s:"My brother ___ ten years old.",o:["is","are","am"],h:"אח שלי בן עשר.",t:"באנגלית אומרים: הוא <b>is</b> בן עשר – He is ten years old 😄"},
+ {s:"I ___ two sisters.",o:["have","has","am"],h:"יש לי שתי אחיות.",t:"<b>I have</b> = יש לי. <b>She has</b> = יש לה."},
+ {s:"My dad ___ coffee every morning.",o:["drinks","drink","drinking"],h:"אבא שלי שותה קפה כל בוקר.",t:"dad = he ← מוסיפים s: <b>drinks</b> ☕"},
+ {s:"We live ___ a big house.",o:["in","on","at"],h:"אנחנו גרים בבית גדול.",t:"<b>in</b> = בתוך: in a house, in Israel 🏠"},
+ {s:"Grandma ___ the best cookies!",o:["makes","make","making"],h:"סבתא מכינה את העוגיות הכי טובות!",t:"grandma = she ← <b>makes</b> 🍪👵"},
+ {s:"___ you love your family?",o:["Do","Does","Are"],h:"את אוהבת את המשפחה שלך?",t:"שאלה עם <b>you</b> ← מתחילים ב-<b>Do</b> ❤️"},
+ {s:"My sister and I ___ best friends.",o:["are","is","am"],h:"אחותי ואני חברות הכי טובות.",t:"שתי אנשים (רבים) ← <b>are</b> 👭"},
+ {s:"Her name ___ Maya.",o:["is","are","be"],h:"קוראים לה מאיה.",t:"<b>Her name is...</b> = קוראים לה... (her = שלה)"},
+ {s:"The baby is ___. Shhh!",o:["sleeping","sleep","sleeps"],h:"התינוק ישן. ששש!",t:"<b>is + ing</b> = קורה עכשיו, ממש ברגע זה 😴"},
+ {s:"Tom is a boy. ___ is my cousin.",o:["He","She","It"],h:"תום הוא בן. הוא בן הדוד שלי.",t:"בן ← <b>He</b>, בת ← <b>She</b>"},
+ {s:"We ___ a party yesterday.",o:["had","have","has"],h:"הייתה לנו מסיבה אתמול.",t:"<b>yesterday</b> ← עבר: have ← <b>had</b> 🎉"}
+];
+const FAMILY_STORY=[
+ ["Today is Grandma Kong's birthday!","היום יום ההולדת של סבתא קונג!"],
+ ["Kong and his little sister make a big cake.","קונג ואחותו הקטנה מכינים עוגה גדולה."],
+ ["Dad brings the gifts, and Mom brings the balloons.","אבא מביא את המתנות, ואמא מביאה את הבלונים."],
+ ["Grandma opens the door. \"Surprise!\" everybody shouts.","סבתא פותחת את הדלת. \"הפתעה!\" צועקים כולם."],
+ ["Grandma laughs and gives everybody a big hug.","סבתא צוחקת ונותנת לכולם חיבוק גדול."],
+ ["Then Polly sings \"Happy Birthday\"... very loudly! 🦜","ואז פולי שר \"יום הולדת שמח\"... בקול רם מאוד! 🦜"],
+ ["Grandma says, \"This is the best birthday ever!\" 🎂","סבתא אומרת: \"זה יום ההולדת הכי טוב אי פעם!\" 🎂"]
+];
+const FAMILY_STORYQ=[
+ {q:"Who makes the cake?",h:"מי מכין את העוגה?",o:["Kong and his sister","Dad and Mom","Polly"],f:"<b>Kong and his sister</b> – קונג ואחותו 🎂"},
+ {q:"What does Mom bring?",h:"מה אמא מביאה?",o:["the balloons","the gifts","the cake"],f:"<b>the balloons</b> = הבלונים 🎈 (אבא הביא את המתנות 🎁)"},
+ {q:"How does Polly sing?",h:"איך פולי שר?",o:["very loudly","very quietly","in Hebrew"],f:"<b>very loudly</b> = בקול רם מאוד 📢🦜 (הוא קורא לזה 'כישרון')"}
+];
+const FAMILY_DICT={today:"היום",grandma:"סבתא","kong's":"של קונג",birthday:"יום הולדת",and:"ו־",little:"קטנה",sister:"אחות",make:"מכינים",cake:"עוגה",dad:"אבא",brings:"מביא/ה",gifts:"מתנות",mom:"אמא",balloons:"בלונים",opens:"פותחת",door:"דלת",surprise:"הפתעה",everybody:"כולם",shouts:"צועקים",gives:"נותנת",hug:"חיבוק",then:"ואז",sings:"שר",happy:"שמח",very:"מאוד",loudly:"בקול רם",says:"אומרת",this:"זה",best:"הכי טוב",ever:"אי פעם"};
+
+const WORLDS={
+ animals:{key:"animals",e:"🦁",en:"Animals",he:"עולם החיות",vocab:ANIMALS,trivia:TRIVIA,sents:SENTS,story:STORY,storyQ:STORYQ,dict:DICT,st:"Where are my bananas?"},
+ food:{key:"food",e:"🍕",en:"Food",he:"עולם האוכל",vocab:FOOD,trivia:FOOD_TRIVIA,sents:FOOD_SENTS,story:FOOD_STORY,storyQ:FOOD_STORYQ,dict:FOOD_DICT,st:"Pizza Day"},
+ school:{key:"school",e:"🏫",en:"School",he:"עולם בית הספר",vocab:SCHOOL,trivia:SCHOOL_TRIVIA,sents:SCHOOL_SENTS,story:SCHOOL_STORY,storyQ:SCHOOL_STORYQ,dict:SCHOOL_DICT,st:"Kong Goes to School"},
+ family:{key:"family",e:"👨‍👩‍👧",en:"Family",he:"עולם המשפחה",vocab:FAMILY,trivia:FAMILY_TRIVIA,sents:FAMILY_SENTS,story:FAMILY_STORY,storyQ:FAMILY_STORYQ,dict:FAMILY_DICT,st:"Grandma's Birthday"}
+};
+const BASE_DICT={a:"אחד / אחת",the:"ה־",is:"הוא / היא (is)",are:"הם (are)",he:"הוא",his:"שלו",on:"על",in:"בתוך",kong:"קונג","kong's":"של קונג",polly:"פולי",captain:"קפטן",big:"גדול",one:"אחד / אחת",eats:"אוכל",bananas:"בננות",banana:"בננה",laughs:"צוחק",with:"עם",says:"אומר"};
+
+/* ---------- VIDEOS (YouTube, official channels, ~1-2 min) ---------- */
+const VIDEOS=[
+ {id:"hB09MdlmVSI",t:"Animal Sounds",he:"מה אומרת כל חיה? קולות של חיות",e:"🐮",w:"animals"},
+ {id:"De2_5sUazoE",t:"Food",he:"מכינים פיצה – מילים של אוכל",e:"🍕",w:"food"},
+ {id:"1HeE9nwjHXw",t:"Vegetables",he:"ירקות טעימים באנגלית",e:"🥕",w:"food"},
+ {id:"MnS3nym_x-c",t:"Cook",he:"מבשלים! מילים מהמטבח",e:"🍳",w:"food"},
+ {id:"Te2M7oYFQgA",t:"Family",he:"בני המשפחה באנגלית",e:"👨‍👩‍👧",w:"family"},
+ {id:"qZyJPZxsmZk",t:"My House",he:"החדרים בבית",e:"🏠",w:"family"},
+ {id:"y_RNpKIxNM4",t:"Feelings",he:"רגשות: שמח, עצוב, כועס...",e:"😊",w:"family"},
+ {id:"BoJBeGUHGv8",t:"Toy",he:"צעצועים באנגלית",e:"🧸",w:"family"},
+ {id:"H6WKa4dPo7s",t:"Colors",he:"צבעים – עם נקניקיות מתפוצצות!",e:"🌈",w:"school"},
+ {id:"nSuj1Z5pqfI",t:"Seven Days",he:"שבעת ימי השבוע",e:"📅",w:"school"},
+ {id:"gSBNSJvOmY8",t:"Jobs",he:"מה תרצי להיות כשתגדלי?",e:"👩‍🚒",w:"school"},
+ {id:"hABfglUwojQ",t:"On In By Under",he:"על, בתוך, ליד, מתחת",e:"📦",w:"school"},
+ {id:"Wrjqz2GTzzI",t:"Seasons",he:"ארבע עונות השנה",e:"🍂",w:"school"},
+ {id:"WLjW9modUgc",t:"ABC",he:"שיר האלף-בית האנגלי",e:"🔤",w:"school"},
+ {id:"loINl3Ln6Ck",t:"Days Of The Week Song",he:"ימי השבוע – שיר קליט",e:"🗓️",w:"school",ch:"Super Simple Songs"}
+];
+
+const PRAISE=["Great job! 🌟","Awesome! 🎉","Super! 🚀","Wow! 🤩","Excellent! 🏆","You rock! 🎸"];
+
+/* ================= STATE ================= */
+const SAVE_KEY="jungleEnglish_v1";
+let ST={name:"אמילי",coins:0,world:"animals",stars:{},watched:{},dailyDone:""};
+try{const s=JSON.parse(localStorage.getItem(SAVE_KEY));if(s&&s.stars)ST=Object.assign(ST,s)}catch(e){}
+if(ST.stars.sling!==undefined||ST.stars.memory!==undefined){ST.stars={animals:ST.stars}}
+for(const k in WORLDS)if(!ST.stars[k])ST.stars[k]={};
+if(!WORLDS[ST.world])ST.world="animals";
+ST.watched=ST.watched||{};
+let W=WORLDS[ST.world];
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(ST))}catch(e){}}
+const $=s=>document.querySelector(s);
+const E=t=>`<span class="en" dir="ltr">${t}</span>`;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const sumObj=o=>Object.values(o||{}).reduce((a,b)=>a+(b||0),0);
+const totalStars=()=>Object.values(ST.stars).reduce((a,o)=>a+sumObj(o),0);
+const worldStars=()=>sumObj(ST.stars[W.key]);
+const STORY_NEED=4;
+
+/* ================= SPEECH ================= */
+let voice=null;
+function loadVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-US/i.test(v.lang)&&/Samantha|Google US|Female/i.test(v.name))||vs.find(v=>/en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null}catch(e){}}
+try{loadVoice();speechSynthesis.onvoiceschanged=loadVoice}catch(e){}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/[^\w\s'?!.,-]/g,""));u.lang="en-US";u.rate=.85;if(voice)u.voice=voice;speechSynthesis.speak(u)}catch(e){}}
+
+/* ================= UI HELPERS ================= */
+let toastT;
+function toast(html,cls=""){const t=$("#toast");t.innerHTML=html;t.className="on "+cls;clearTimeout(toastT);toastT=setTimeout(()=>t.className="",1600)}
+let current="start";
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));current=id;if(document.activeElement)document.activeElement.blur()}
+document.querySelectorAll("[data-back]").forEach(b=>b.onclick=()=>{stopSling();goHub()});
+
+/* confetti */
+const fx=$("#fx"),fctx=fx.getContext("2d");let parts=[],fxOn=false;
+function confetti(){fx.width=innerWidth*devicePixelRatio;fx.height=innerHeight*devicePixelRatio;fctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+ const C=["#ff4fa3","#ffd23f","#22b14c","#3b82f6","#7b2ff7","#ff7a00"];
+ for(let i=0;i<140;i++)parts.push({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-3,c:pick(C),r:Math.random()*6+4,a:Math.random()*6,l:1});
+ if(!fxOn){fxOn=true;requestAnimationFrame(fxLoop)}}
+function fxLoop(){fctx.clearRect(0,0,innerWidth,innerHeight);parts.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.a+=.2;p.l-=.008;fctx.save();fctx.globalAlpha=Math.max(0,p.l);fctx.translate(p.x,p.y);fctx.rotate(p.a);fctx.fillStyle=p.c;fctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);fctx.restore()});
+ parts=parts.filter(p=>p.l>0&&p.y<innerHeight+40);if(parts.length)requestAnimationFrame(fxLoop);else{fxOn=false;fctx.clearRect(0,0,innerWidth,innerHeight)}}
+
+/* ================= START & HUB ================= */
+$("#nameIn").value=ST.name||"אמילי";
+$("#goBtn").onclick=()=>{ST.name=($("#nameIn").value.trim()||"אמילי");save();say("Welcome to the jungle!");goHub(true)};
+function starStr(n){return "⭐".repeat(n)+"☆".repeat(3-n)}
+function goHub(first){
+ show("hub");
+ $("#hubName").textContent="👧 "+ST.name;$("#hubCoins").textContent=ST.coins;$("#hubStars").textContent=totalStars();
+ $("#wTabs").innerHTML=Object.values(WORLDS).map(w=>`<button class="wtab ${w===W?"on":""}" data-w="${w.key}"><span class="we">${w.e}</span><span class="en">${w.en}</span></button>`).join("");
+ $("#wTabs").querySelectorAll(".wtab").forEach(b=>b.onclick=()=>{b.blur();if(W.key===b.dataset.w)return;W=WORLDS[b.dataset.w];ST.world=W.key;save();say(W.en);goHub();pollySay(`ברוכה הבאה ל${W.he}! ${W.e} ${E(W.en)} – בואי נלמד מילים חדשות!`)});
+ $("#wTitle").innerHTML=`${W.e} ${W.he} – ${E(W.en)}`;
+ $("#storyBtn .ennm").textContent=W.st;
+ const sw=ST.stars[W.key];
+ document.querySelectorAll("[data-s]").forEach(el=>el.textContent=starStr(sw[el.dataset.s]||0));
+ const v=todayVideo();$("#vidToday").innerHTML=`${v.e} ${E(v.t)}`;$("#vidNew").style.display=ST.dailyDone===todayKey()?"none":"";
+ const sb=$("#storyBtn"),locked=worldStars()<STORY_NEED;sb.classList.toggle("locked",locked);
+ let lk=sb.querySelector(".lock");if(locked&&!lk){lk=document.createElement("div");lk.className="lock";lk.textContent="🔒";sb.appendChild(lk)}if(!locked&&lk)lk.remove();
+ if(first)pollySay(`${E("Hello")} ${ST.name}! 👋 אני Polly, התוכי הכי חכם בג'ונגל (ככה אני אומר לכולם). בחרי משחק ובואי נלמד אנגלית!`);
+ else pollySay(locked?`ב${W.he} יש לך ${worldStars()} ⭐. אספי ${STORY_NEED} כוכבים בעולם הזה כדי לפתוח את הסיפור! 📖`:`${E(pick(PRAISE))} רוצה לשמוע בדיחה? לחצי עליי! 🦜`);
+}
+function pollySay(h){$("#pollyTxt").innerHTML=h}
+$("#pollyBird").onclick=()=>pollySay(pick(JOKES));
+document.querySelectorAll(".st[data-g]").forEach(b=>b.onclick=()=>{
+ const g=b.dataset.g;
+ if(g==="story"&&worldStars()<STORY_NEED){toast(`🔒 צריך ${STORY_NEED} ⭐ בעולם הזה כדי לפתוח`);return}
+ ({sling:slingStart,memory:memStart,trivia:()=>quizStart("trivia"),sent:()=>quizStart("sent"),story:storyStart})[g]();
+});
+
+/* ================= VIDEOS ================= */
+const CAN_EMBED=/github\.io$/i.test(location.hostname)||/[?&]embed=1/.test(location.search);
+function openPlayer(v){
+ $("#pFrame").innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0&playsinline=1&autoplay=1&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+ $("#pAlt").href=`https://www.youtube.com/watch?v=${v.id}`;
+ try{speechSynthesis.cancel()}catch(e){}
+ $("#player").classList.add("on");
+}
+$("#pClose").onclick=()=>{$("#player").classList.remove("on");$("#pFrame").innerHTML=""};
+function todayKey(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function todayIdx(){const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)%VIDEOS.length}
+function todayVideo(){return VIDEOS[todayIdx()]}
+let vSel=null;
+$("#vidBtn").onclick=e=>{e.currentTarget.blur();vSel=todayIdx();showVideos()};
+function showVideos(){
+ show("videos");$("#vCoins").textContent=ST.coins;
+ const i=vSel,v=VIDEOS[i],isToday=i===todayIdx();
+ const yt=`https://www.youtube.com/watch?v=${v.id}`;
+ $("#vCard").innerHTML=`${isToday?`<span class="tag">⭐ הקליפ של היום</span>`:`<span class="tag" style="background:#eef">🎬 סרטון</span>`}
+  <div class="ve">${v.e}</div><div class="vt en">${v.t}</div><div class="vh">${v.he}</div>
+  <div class="vch en">${v.ch||"Pinkfong"} · 1-2 min</div>
+  ${CAN_EMBED?`<button class="btn" id="vGo" style="margin-top:10px">▶️ צפייה</button>`:`<a class="btn" href="${yt}" target="_blank" rel="noopener" id="vGo">▶️ לצפייה ביוטיוב</a>`}
+  ${isToday&&ST.dailyDone!==todayKey()?`<div class="vh" style="color:#16a34a;font-weight:800">🍌 +10 בננות על הקליפ היומי!</div>`:""}`;
+ const onWatch=()=>{ST.watched[v.id]=1;if(CAN_EMBED)openPlayer(v);
+  if(isToday&&ST.dailyDone!==todayKey()){ST.dailyDone=todayKey();ST.coins+=10;toast("🍌 +10 בננות! תהני מהסרטון","good");}
+  save();setTimeout(showVideos,400)};
+ $("#vGo").addEventListener("click",onWatch);
+ const list=$("#vList");list.innerHTML="";
+ VIDEOS.forEach((x,k)=>{const b=document.createElement("button");b.className="vit"+(k===i?" sel":"");
+  b.innerHTML=`<span class="e">${x.e}</span><span><span class="t en">${x.t}</span><br><span class="ok">${k===todayIdx()?"⭐ היום":ST.watched[x.id]?"✓ ראיתי":"&nbsp;"}</span></span>`;
+  b.onclick=()=>{b.blur();vSel=k;showVideos();$("#app").scrollTop=0};list.appendChild(b)});
+}
+
+/* ================= RESULT ================= */
+let againFn=null;
+function result(game,stars,coins,title,lines){
+ const sw=ST.stars[W.key],prev=sw[game]||0;if(stars>prev)sw[game]=stars;ST.coins+=coins;save();
+ show("result");
+ $("#rStars").innerHTML=[0,1,2].map(i=>`<span style="animation-delay:${i*.25}s">${i<stars?"⭐":"☆"}</span>`).join("");
+ $("#rTitle").innerHTML=title;$("#rLines").innerHTML=lines+`<br>🍌 הרווחת ${coins} בננות!`+(stars>prev&&prev>0?"<br>🏅 שיא חדש!":"");
+ $("#rPolly").innerHTML=stars===3?`${E("Perfect!")} את גאונה של אנגלית! אפילו אני לא יודע את כל זה (אל תגלי לאף אחד) 🤫`:stars>0?`${E("Good job!")} עוד קצת אימון ותגיעי ל-3 כוכבים! 💪`:`לא נורא! גם אני פעם אמרתי <span class='en'>"I am a banana"</span> במקום <span class='en'>"I want a banana"</span> 🍌😂 נסי שוב!`;
+ if(stars>0)confetti();
+ againFn=()=>({sling:slingStart,memory:memStart,trivia:()=>quizStart("trivia"),sent:()=>quizStart("sent"),story:storyStart})[game]();
+}
+$("#rAgain").onclick=()=>againFn&&againFn();
+$("#rMap").onclick=()=>goHub();
+
+/* ================= SLING KONG ================= */
+const cv=$("#slingCanvas"),ctx=cv.getContext("2d");
+const LW=400,ROW=175,G=1400,NROWS=10;
+let S=null,raf=0,LH=700,scl=1,lastTs=0;
+function fitCanvas(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;scl=r.width/LW;LH=r.height/scl;ctx.setTransform(d*scl,0,0,d*scl,0,0)}
+addEventListener("resize",()=>{if(current==="sling")fitCanvas()});
+const PETS=[
+ {e:"🐒",en:"monkey",he:"קוף"},{e:"🐸",en:"frog",he:"צפרדע"},{e:"🐱",en:"cat",he:"חתולה"},
+ {e:"🐼",en:"panda",he:"פנדה"},{e:"🦊",en:"fox",he:"שועל"},{e:"🐨",en:"koala",he:"קואלה"},
+ {e:"🐯",en:"tiger",he:"טיגריס"},{e:"🐰",en:"bunny",he:"ארנבונת"},{e:"🐧",en:"penguin",he:"פינגווין"},
+ {e:"🦄",en:"unicorn",he:"חד-קרן"},{e:"🐶",en:"puppy",he:"גור כלבים"},{e:"🦉",en:"owl",he:"ינשוף"}
+];
+function slingStart(){
+ show("sling");cancelAnimationFrame(raf);
+ const ov=$("#petPick"),g=$("#petGrid");ov.style.display="flex";g.innerHTML="";
+ PETS.forEach(p=>{const b=document.createElement("button");b.className="pet"+(ST.pet===p.en?" sel":"");
+  b.innerHTML=`<span class="pe">${p.e}</span><span class="en">${p.en}</span><small>${p.he}</small>`;
+  b.onclick=()=>{b.blur();ST.pet=p.en;save();say("I choose the "+p.en+"!");ov.style.display="none";slingBegin(p)};
+  g.appendChild(b)});
+}
+function slingBegin(pet){
+ fitCanvas();
+ const pool=shuffle(W.vocab);
+ S={pet,rows:[],cur:0,hearts:3,coins:0,t:0,drag:null,tut:true,over:false,shake:0,pool,wrongs:0};
+ S.rows.push({y:0,amp:0,sp:0,ph:0,pegs:[{bx:200,x:200,y:0,start:true,st:"ok"}],banana:null});
+ for(let k=1;k<=NROWS;k++)S.rows.push(makeRow(k));
+ const a=S.rows[0].pegs[0];
+ S.m={x:a.x,y:a.y,vx:0,vy:0,state:"hang",anchor:a,flyT:0,rot:0};
+ S.camY=a.y-(LH-190);
+ $("#slTut").style.display="";updHud();
+ cancelAnimationFrame(raf);lastTs=0;raf=requestAnimationFrame(slLoop);
+}
+function makeRow(k){
+ const tgt=S.pool[(k-1)%S.pool.length];
+ const others=shuffle(W.vocab.filter(a=>a!==tgt)).slice(0,2);
+ const lanes=shuffle([95,200,305]);
+ const words=shuffle([tgt,...others]);
+ const y=-k*ROW;
+ const amp=k>=5?Math.min(26+(k-5)*4,40):0;
+ return{y,amp,sp:1+k*.12,ph:Math.random()*6,target:tgt,
+  pegs:words.map((w,i)=>({bx:lanes[i]+(Math.random()*24-12),x:0,y:y+(Math.random()*30-15),w,correct:w===tgt,st:"idle"})),
+  banana:Math.random()<.8?{x:60+Math.random()*280,y:y+ROW*.5,got:false}:null};
+}
+function updHud(){
+ $("#slHearts").textContent="❤️".repeat(S.hearts)+"🖤".repeat(3-S.hearts);
+ $("#slProg").textContent=`${S.cur}/${NROWS}`;$("#slCoins").textContent=S.coins;
+ const r=S.rows[S.cur+1];
+ $("#slTarget").innerHTML=r?`<small>קפצי אל:</small>${r.target.e} ${r.target.he}`:"🏆";
+}
+function stopSling(){cancelAnimationFrame(raf);if(S)S.over=true}
+function slLoop(ts){
+ if(!S||S.over&&current!=="sling")return;
+ const dt=lastTs?Math.min(.033,(ts-lastTs)/1000):.016;lastTs=ts;
+ slUpdate(dt);slDraw();
+ if(current==="sling")raf=requestAnimationFrame(slLoop);
+}
+function slUpdate(dt){
+ S.t+=dt;if(S.shake>0)S.shake-=dt;
+ for(const r of S.rows){const off=r.amp?r.amp*Math.sin(S.t*r.sp+r.ph):0;for(const p of r.pegs)p.x=p.bx+off}
+ const m=S.m;
+ if(m.state==="hang"){m.x=m.anchor.x;m.y=m.anchor.y;m.rot*=.85}
+ else if(m.state==="fly"){
+  m.flyT+=dt;m.vy+=G*dt;m.x+=m.vx*dt;m.y+=m.vy*dt;m.rot+=dt*7*(m.vx>=0?1:-1);
+  if(m.x<22){m.x=22;m.vx=Math.abs(m.vx)*.6}if(m.x>LW-22){m.x=LW-22;m.vx=-Math.abs(m.vx)*.6}
+  for(const r of S.rows){const b=r.banana;if(b&&!b.got&&Math.hypot(m.x-b.x,m.y-b.y)<34){b.got=true;S.coins+=5;updHud()}}
+  if(!S.over){
+   const nr=S.rows[S.cur+1];
+   const cands=nr?nr.pegs.filter(p=>p.st!=="wrong"):[];
+   if(m.flyT>.3)cands.push(m.anchor);
+   for(const p of cands){if(Math.hypot(m.x-p.x,m.y-p.y)<34){grab(p);break}}
+  }
+  if(m.state==="fly"&&m.y-S.camY>LH+80){
+   m.state="hang";m.vx=m.vy=0;
+   if(!S.over)toast("נפלת! 🙈 נסי שוב, את יכולה! 💪");
+  }
+ }
+ let want=m.anchor.y-(LH-190);
+ if(m.state==="fly")want=Math.min(want,m.y-LH*.38);
+ S.camY+=(want-S.camY)*Math.min(1,dt*5);
+}
+function grab(p){
+ const m=S.m;
+ if(p===m.anchor){m.state="hang";m.vx=m.vy=0;return}
+ if(p.correct){
+  p.st="ok";m.anchor=p;m.state="hang";m.vx=m.vy=0;S.cur++;S.coins+=10;
+  say(p.w.en);toast(`${p.w.e} ${E(p.w.en)} = ${p.w.he} ✓`,"good");
+  for(const q of S.rows[S.cur].pegs)if(q!==p&&q.st!=="wrong")q.st="gone";
+  updHud();
+  if(S.cur>=NROWS){S.over=true;setTimeout(()=>slFinish(true),900)}
+ }else{
+  p.st="wrong";S.hearts--;S.wrongs++;S.shake=.35;
+  say(p.w.en);toast(`אופס! ${p.w.e} ${E(p.w.en)} = ${p.w.he}`,"bad");
+  m.vx=0;m.vy=180;m.flyT=.31;updHud();
+  if(S.hearts<=0){S.over=true;setTimeout(()=>slFinish(false),1100)}
+ }
+}
+function slFinish(win){
+ if(current!=="sling")return;stopSling();
+ const stars=win?S.hearts:0;
+ result("sling",stars,S.coins,win?`${E("You did it!")} 🐒🏆`:"נגמרו הלבבות 💔",
+  win?`קפצת על ${NROWS} מילים באנגלית!${S.wrongs?`<br>טעויות: ${S.wrongs}`:"<br>בלי אף טעות! 🤯"}`:`הגעת ל-${S.cur} מתוך ${NROWS} מילים.`);
+}
+/* input */
+function lp(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/scl,y:(e.clientY-r.top)/scl}}
+cv.addEventListener("pointerdown",e=>{if(!S||S.over||S.m.state!=="hang")return;e.preventDefault();const p=lp(e);S.drag={sx:p.x,sy:p.y,px:0,py:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
+cv.addEventListener("pointermove",e=>{if(!S||!S.drag)return;e.preventDefault();const p=lp(e);let px=p.x-S.drag.sx,py=p.y-S.drag.sy;const L=Math.hypot(px,py),M=150;if(L>M){px*=M/L;py*=M/L}S.drag.px=px;S.drag.py=py});
+function release(){if(!S||!S.drag)return;const d=S.drag;S.drag=null;if(Math.hypot(d.px,d.py)<16)return;
+ const m=S.m;m.vx=-d.px*7.6;m.vy=-d.py*7.6;m.state="fly";m.flyT=0;
+ if(S.tut){S.tut=false;$("#slTut").style.display="none"}}
+cv.addEventListener("pointerup",release);cv.addEventListener("pointercancel",release);
+/* draw */
+function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function slDraw(){
+ const cam=S.camY,H=LH;
+ ctx.save();
+ if(S.shake>0)ctx.translate((Math.random()-.5)*10,(Math.random()-.5)*6);
+ // sky gets darker/greener the higher you climb
+ const h=Math.min(1,-cam/(ROW*NROWS));
+ const g=ctx.createLinearGradient(0,0,0,H);
+ g.addColorStop(0,`hsl(${195-h*40},85%,${72-h*10}%)`);g.addColorStop(.6,`hsl(${120-h*10},60%,${70-h*8}%)`);g.addColorStop(1,"#2fae4e");
+ ctx.fillStyle=g;ctx.fillRect(-20,-20,LW+40,H+40);
+ // parallax decorations
+ ctx.textAlign="center";ctx.textBaseline="middle";
+ ctx.font="34px serif";
+ const dec=["🌴","🌿","🍃","🌺","🌳"];
+ for(let j=0;j<14;j++){const yy=(((j*95-cam*.5)%(14*95))+14*95)%(14*95)-60;ctx.globalAlpha=.55;ctx.fillText(dec[j%5],j%2?18:LW-18,yy)}
+ ctx.globalAlpha=1;
+ // vines
+ ctx.strokeStyle="rgba(30,110,40,.35)";ctx.lineWidth=4;
+ for(const vx of [40,LW-40]){ctx.beginPath();for(let yy=-20;yy<H+20;yy+=20){const xx=vx+Math.sin((yy+cam*.5)/40)*8;yy===-20?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy)}ctx.stroke()}
+ ctx.translate(0,-cam);
+ // bananas
+ ctx.font="28px serif";
+ for(const r of S.rows){const b=r.banana;if(b&&!b.got&&b.y-cam>-40&&b.y-cam<H+40){ctx.fillText("🍌",b.x,b.y+Math.sin(S.t*3+b.x)*4)}}
+ // pegs
+ for(let i=0;i<S.rows.length;i++){
+  const r=S.rows[i];if(r.y-cam<-120||r.y-cam>H+80)continue;
+  for(const p of r.pegs){
+   if(p.st==="gone")continue;
+   if(p.start){ctx.fillStyle="#8b5a2b";rr(p.x-55,p.y+6,110,16,8);ctx.fill();ctx.fillStyle="#5fbf3a";rr(p.x-58,p.y+2,116,9,5);ctx.fill()}
+   ctx.beginPath();ctx.arc(p.x,p.y,14,0,7);
+   ctx.fillStyle=p.st==="ok"?"#22b14c":p.st==="wrong"?"#ef4444":(i===S.cur+1?"#a0612d":"#7a5a3a");
+   ctx.fill();ctx.lineWidth=4;ctx.strokeStyle="#fff";ctx.stroke();
+   ctx.beginPath();ctx.arc(p.x-4,p.y-4,4,0,7);ctx.fillStyle="rgba(255,255,255,.5)";ctx.fill();
+   if(p.w&&(i===S.cur+1||p.st==="ok"||p.st==="wrong")){
+    ctx.font="bold 21px 'Chalkboard SE','Comic Sans MS',sans-serif";
+    const tw=ctx.measureText(p.w.en).width+22;
+    let lx=Math.max(4,Math.min(LW-4-tw,p.x-tw/2));
+    const ly=p.y-54;
+    ctx.fillStyle=p.st==="wrong"?"#ffe1e1":p.st==="ok"?"#e3ffe9":"#fff";
+    rr(lx,ly,tw,32,12);ctx.fill();
+    ctx.lineWidth=3;ctx.strokeStyle=p.st==="wrong"?"#ef4444":p.st==="ok"?"#22b14c":"#7b2ff7";ctx.stroke();
+    ctx.beginPath();ctx.moveTo(p.x-6,ly+32);ctx.lineTo(p.x+6,ly+32);ctx.lineTo(p.x,ly+40);ctx.closePath();ctx.fill();
+    ctx.fillStyle="#2a1a5e";ctx.fillText(p.w.en,lx+tw/2,ly+17);
+    if(p.st==="wrong"){ctx.font="bold 16px system-ui,sans-serif";ctx.fillStyle="#c00";ctx.direction="rtl";ctx.fillText("= "+p.w.he,p.x,p.y+30);ctx.direction="ltr"}
+   }
+  }
+ }
+ // sling + trajectory
+ const m=S.m;let mx=m.x,my=m.y;
+ if(S.drag&&m.state==="hang"){
+  mx=m.x+S.drag.px*.45;my=m.y+S.drag.py*.45;
+  ctx.strokeStyle="#5a3a1a";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(m.x-12,m.y);ctx.lineTo(mx,my+10);ctx.lineTo(m.x+12,m.y);ctx.stroke();
+ }
+ // monkey
+ ctx.save();ctx.translate(mx,my+(m.state==="hang"?22:0));ctx.rotate(m.state==="fly"?m.rot:Math.sin(S.t*3)*.12);
+ ctx.font="48px serif";ctx.fillText(S.pet.e,0,0);ctx.restore();
+ ctx.restore();
+}
+
+/* ================= MEMORY ================= */
+let MEM=null;
+function memStart(){
+ show("memory");
+ const ws=shuffle(W.vocab).slice(0,6);
+ const cards=shuffle(ws.flatMap((w,i)=>[{id:i,t:"pic",w},{id:i,t:"word",w}]));
+ MEM={open:[],lock:false,moves:0,found:0};
+ $("#mMoves").textContent=0;
+ const g=$("#mGrid");g.innerHTML="";
+ cards.forEach(c=>{
+  const el=document.createElement("div");el.className="card";
+  el.innerHTML=`<div class="f">🌴</div><div class="b ${c.t==="word"?"word en":""}">${c.t==="word"?c.w.en:c.w.e}</div>`;
+  el.onclick=()=>memFlip(el,c);g.appendChild(el);
+ });
+ toast("🃏 מצאי זוגות: ציור + מילה באנגלית!");
+}
+function memFlip(el,c){
+ if(MEM.lock||el.classList.contains("flip"))return;
+ el.classList.add("flip");if(c.t==="word")say(c.w.en);
+ MEM.open.push({el,c});
+ if(MEM.open.length<2)return;
+ MEM.moves++;$("#mMoves").textContent=MEM.moves;
+ const [a,b]=MEM.open;MEM.open=[];
+ if(a.c.id===b.c.id){
+  a.el.classList.add("match");b.el.classList.add("match");MEM.found++;
+  setTimeout(()=>say(a.c.w.en),300);
+  toast(`${a.c.w.e} ${E(a.c.w.en)} = ${a.c.w.he}`,"good");
+  if(MEM.found===6){const st=MEM.moves<=9?3:MEM.moves<=13?2:1;setTimeout(()=>result("memory",st,10+st*10,`${E("Memory master!")} 🧠`,`מצאת את כל הזוגות ב-${MEM.moves} צעדים!<br>(ב-9 צעדים או פחות = 3 כוכבים)`),1100)}
+ }else{MEM.lock=true;setTimeout(()=>{a.el.classList.remove("flip");b.el.classList.remove("flip");MEM.lock=false},950)}
+}
+
+/* ================= QUIZ (trivia / sentences / story questions) ================= */
+let Q=null;
+function quizStart(kind){
+ const src=kind==="trivia"?W.trivia:kind==="sent"?W.sents:W.storyQ;
+ const items=kind==="story"?src.slice():shuffle(src).slice(0,8);
+ Q={kind,items,i:0,ok:0,coins:0,res:[],t0:0,showHe:false};
+ $("#qTitle").innerHTML=kind==="trivia"?"❓ טריוויה":kind==="sent"?"✏️ השלמת משפטים":"📖 שאלות על הסיפור";
+ show("quiz");qRender();
+}
+function qFull(it,ans){return it.s?it.s.replace("___",ans):it.q}
+function qRender(){
+ const it=Q.items[Q.i];Q.showHe=false;Q.t0=performance.now();
+ $("#qDots").innerHTML=Q.items.map((_,k)=>`<i class="${k<Q.i?(Q.res[k]?"ok":"no"):k===Q.i?"now":""}"></i>`).join("");
+ $("#qE").innerHTML=it.s?it.s.replace("___",`<span class="blank">&nbsp;</span>`):it.q;
+ $("#qH").innerHTML=Q.kind==="sent"?"בחרי את המילה החסרה 👇":"";
+ $("#qHeBtn").style.display=Q.kind==="sent"?"none":"";
+ $("#qCoins").textContent=Q.coins;
+ const opts=shuffle(it.o);
+ const box=$("#qOpts");box.innerHTML="";box.dataset.lock="0";
+ box.style.gridTemplateColumns=it.o.length===3?"1fr":"1fr 1fr";
+ opts.forEach(o=>{const b=document.createElement("button");b.className="opt en";b.textContent=o;b.onclick=()=>qAnswer(b,o);box.appendChild(b)});
+ $("#qFb").className="fb";$("#qFb").innerHTML="";
+ if(document.activeElement)document.activeElement.blur();
+ if(Q.kind!=="sent")setTimeout(()=>{if(current==="quiz")say(it.q)},250);
+}
+$("#qSay").onclick=e=>{e.currentTarget.blur();const it=Q.items[Q.i];say(it.s?it.s.replace("___","blank"):it.q)};
+$("#qHeBtn").onclick=e=>{e.currentTarget.blur();const it=Q.items[Q.i];$("#qH").textContent=it.h};
+function qAnswer(btn,o){
+ btn.blur();
+ const it=Q.items[Q.i],right=it.o[0],ok=o===right;
+ if($("#qOpts").dataset.lock==="1")return;$("#qOpts").dataset.lock="1";
+ document.querySelectorAll("#qOpts .opt").forEach(b=>{b.disabled=true;if(b.textContent===right)b.classList.add("right");else if(b===btn)b.classList.add("wrong");else b.classList.add("dim")});
+ const fast=(performance.now()-Q.t0)<6000;
+ if(ok){Q.ok++;const c=10+(fast?5:0);Q.coins+=c}
+ Q.res[Q.i]=ok;$("#qCoins").textContent=Q.coins;
+ if(it.s)$("#qE").innerHTML=it.s.replace("___",`<span class="blank">${right}</span>`);
+ say(qFull(it,right));
+ const v=ok?`<b class="v">✅ ${E(pick(PRAISE))}</b>${fast?" ⚡ בונוס מהירות!":""}`:`<b class="v">💪 כמעט!</b> התשובה הנכונה: ${E("<b>"+right+"</b>")}`;
+ const body=it.s?`<div>🇮🇱 ${it.h}</div><div style="margin-top:6px">🦜 ${it.t}</div>`:`<div style="margin-top:6px">🦜 ${it.f}</div>`;
+ const last=Q.i===Q.items.length-1;
+ $("#qFb").innerHTML=`${v}${body}<button class="btn nx ${last?"green":""}" id="qNext">${last?"סיום 🏁":"הבא ➜"}</button>`;
+ $("#qFb").className="fb on";
+ $("#qNext").onclick=qNext;
+}
+function qNext(){
+ $("#qOpts").dataset.lock="0";
+ if(Q.i<Q.items.length-1){Q.i++;qRender();return}
+ const n=Q.items.length,ok=Q.ok;
+ let st;
+ if(Q.kind==="story")st=Math.max(1,ok);
+ else st=ok>=7?3:ok>=5?2:ok>=3?1:0;
+ const ttl=Q.kind==="trivia"?`${E("Trivia star!")} 🌟`:Q.kind==="sent"?`${E("Grammar hero!")} 🦸‍♀️`:`${E("Story time done!")} 📖`;
+ result(Q.kind==="story"?"story":Q.kind,st,Q.coins,ttl,`ענית נכון על ${ok} מתוך ${n} שאלות!`);
+}
+
+/* ================= STORY ================= */
+function storyStart(){
+ show("storyS");
+ const box=$("#storyBox");box.innerHTML="";
+ $("#storyTitle").textContent=W.st;
+ W.story.forEach(([en,he])=>{
+  const d=document.createElement("div");d.className="sent";
+  const words=en.replace(/[A-Za-z']+/g,w=>`<w data-w="${w.toLowerCase()}">${w}</w>`);
+  d.innerHTML=`<div class="se en" dir="ltr">${words}</div><div class="tools"><button class="sp">🔊 הקשבה</button><button class="tr">🇮🇱 תרגום</button></div><div class="sh">${he}</div>`;
+  d.querySelector(".sp").onclick=e=>{e.currentTarget.blur();say(en)};
+  d.querySelector(".tr").onclick=e=>{e.currentTarget.blur();d.querySelector(".sh").classList.toggle("on")};
+  d.querySelectorAll("w").forEach(w=>w.onclick=()=>{
+   document.querySelectorAll(".se w.hl").forEach(x=>x.classList.remove("hl"));w.classList.add("hl");
+   const k=w.dataset.w,k2=k.replace(/'s$/,""),D=Object.assign({},BASE_DICT,W.dict);say(w.textContent);
+   $("#dict").innerHTML=`📖 ${E(w.textContent)} = ${D[k]||D[k2]||"🤔"}`;
+  });
+  box.appendChild(d);
+ });
+ box.scrollTop=0;
+ $("#dict").innerHTML="👆 לחצי על מילה כדי לשמוע ולתרגם";
+}
+$("#storyQ").onclick=()=>quizStart("story");
+</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</body>
+</html>

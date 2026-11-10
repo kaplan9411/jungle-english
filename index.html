@@ -173,7 +173,7 @@ h1 .en{font-size:42px}
   <div class="logo">🐒</div>
   <h1><span class="en">Jungle English</span><br>ג'ונגל המילים</h1>
   <div class="sub">קופצים, משחקים ולומדים אנגלית! 🌴</div>
-  <input id="nameIn" maxlength="12" placeholder="השם שלך" value="אמילי">
+  <input id="nameIn" maxlength="12" placeholder="מה השם שלך?" value="">
   <button class="btn" id="goBtn">יאללה לג'ונגל! 🌴</button>
   <div class="credit">עם התוכי Polly 🦜 שיודע לדבר אנגלית (בערך)</div>
 </section>
@@ -181,7 +181,7 @@ h1 .en{font-size:42px}
 <!-- HUB -->
 <section class="screen" id="hub">
   <div class="topbar">
-    <div class="pill" id="hubName">👧 אמילי</div>
+    <div class="pill" id="hubName"></div>
     <div class="pill">⭐ <span id="hubStars">0</span></div>
     <div class="pill">🍌 <span id="hubCoins">0</span></div>
   </div>
@@ -575,7 +575,7 @@ const PRAISE=["Great job! 🌟","Awesome! 🎉","Super! 🚀","Wow! 🤩","Excel
 
 /* ================= STATE ================= */
 const SAVE_KEY="jungleEnglish_v1";
-let ST={name:"אמילי",coins:0,world:"animals",stars:{},watched:{},dailyDone:""};
+let ST={name:"",coins:0,world:"animals",stars:{},watched:{},dailyDone:""};
 try{const s=JSON.parse(localStorage.getItem(SAVE_KEY));if(s&&s.stars)ST=Object.assign(ST,s)}catch(e){}
 if(ST.stars.sling!==undefined||ST.stars.memory!==undefined){ST.stars={animals:ST.stars}}
 for(const k in WORLDS)if(!ST.stars[k])ST.stars[k]={};
@@ -615,12 +615,12 @@ function fxLoop(){fctx.clearRect(0,0,innerWidth,innerHeight);parts.forEach(p=>{p
  parts=parts.filter(p=>p.l>0&&p.y<innerHeight+40);if(parts.length)requestAnimationFrame(fxLoop);else{fxOn=false;fctx.clearRect(0,0,innerWidth,innerHeight)}}
 
 /* ================= START & HUB ================= */
-$("#nameIn").value=ST.name||"אמילי";
-$("#goBtn").onclick=()=>{ST.name=($("#nameIn").value.trim()||"אמילי");save();say("Welcome to the jungle!");goHub(true)};
+$("#nameIn").value=ST.name||"";
+$("#goBtn").onclick=()=>{const n=$("#nameIn").value.trim();if(!n){toast("✍️ קודם כותבים שם!");$("#nameIn").focus();return}ST.name=n;save();say("Welcome to the jungle!");goHub(true)};
 function starStr(n){return "⭐".repeat(n)+"☆".repeat(3-n)}
 function goHub(first){
  show("hub");
- $("#hubName").textContent="👧 "+ST.name;$("#hubCoins").textContent=ST.coins;$("#hubStars").textContent=totalStars();
+ $("#hubName").textContent="🙂 "+ST.name;$("#hubCoins").textContent=ST.coins;$("#hubStars").textContent=totalStars();
  $("#wTabs").innerHTML=Object.values(WORLDS).map(w=>`<button class="wtab ${w===W?"on":""}" data-w="${w.key}"><span class="we">${w.e}</span><span class="en">${w.en}</span></button>`).join("");
  $("#wTabs").querySelectorAll(".wtab").forEach(b=>b.onclick=()=>{b.blur();if(W.key===b.dataset.w)return;W=WORLDS[b.dataset.w];ST.world=W.key;save();say(W.en);goHub();pollySay(`ברוכה הבאה ל${W.he}! ${W.e} ${E(W.en)} – בואי נלמד מילים חדשות!`)});
  $("#wTitle").innerHTML=`${W.e} ${W.he} – ${E(W.en)}`;
